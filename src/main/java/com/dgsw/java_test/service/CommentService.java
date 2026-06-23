@@ -1,100 +1,89 @@
 package com.dgsw.java_test.service;
 
+import com.dgsw.java_test.common.exception.NotFoundException;
+import com.dgsw.java_test.dto.request.CreateCommentRequest;
+import com.dgsw.java_test.dto.request.UpdateCommentRequest;
+import com.dgsw.java_test.dto.response.CommentResponse;
+import com.dgsw.java_test.dto.response.CommentsResponse;
 import com.dgsw.java_test.entity.Comment;
 import com.dgsw.java_test.entity.CommentCategory;
 import com.dgsw.java_test.entity.Schedule;
 import com.dgsw.java_test.repository.CommentRepository;
 import com.dgsw.java_test.repository.ScheduleRepository;
-import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public List<Comment> getComments(
-        Long scheduleId,
-        CommentCategory commentCategory
+    public CommentsResponse getComments(
+            Long scheduleId,
+            CommentCategory commentCategory
     ) {
+        if (!scheduleRepository.existsById(scheduleId)) {
+            throw new NotFoundException("일정이 존재하지 않습니다.");
+        }
+
         List<Comment> comments;
-        // commentCategory를 지정한 경우 해당 category만을 검색
-        if(commentCategory != null) {
-            comments = commentRepository.findAllByScheduleIdAndCategory(scheduleId, commentCategory);
+        if (commentCategory == null) {
+            comments = commentRepository.findAllByScheduleScheduleId(scheduleId);
         } else {
-            // commentCategory가 null인 경우 category는 신경X
-            comments = commentRepository.findAllByScheduleId(scheduleId);
+            comments = commentRepository.findAllByScheduleScheduleIdAndCategory(scheduleId, commentCategory);
         }
-        return comments;
+
+        return CommentsResponse.from(comments);
     }
 
     @Transactional
-    public boolean createComment(
-        CommentCategory commentCategory,
-        String content,
-        String author,
-        Long scheduleId
+    public CommentResponse createComment(
+            Long scheduleId,
+            CreateCommentRequest request
     ) {
-        Optional<Schedule> scheduleOptional = scheduleRepository.findById(scheduleId);
+        Schedule schedule = getSchedule(scheduleId);
+        Comment comment = Comment.create(
+                request.category(),
+                request.content(),
+                request.author(),
+                schedule
+        );
 
-        if(scheduleOptional.isEmpty()) {
-            return false;
-        }
-
-        Comment comment = Comment.builder()
-            .content(content)
-            .author(author)
-            .scheduleId(scheduleId)
-            .category(commentCategory)
-            .build();
-
-        commentRepository.save(comment);
-        return true;
+        return CommentResponse.from(commentRepository.save(comment));
     }
 
     @Transactional
-    public boolean updateComment(
-        Long commentId,
-        String content,
-        CommentCategory category
+    public CommentResponse updateComment(
+            Long scheduleId,
+            Long commentId,
+            UpdateCommentRequest request
     ) {
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        Comment comment = getComment(scheduleId, commentId);
+        comment.update(request.category(), request.content());
 
-        if(commentOptional.isEmpty()) {
-            return false;
-        }
-        Comment comment = commentOptional.get();
-
-        if(category != null) {
-            comment.setCategory(category);
-        }
-        if(content != null) {
-            comment.setContent(content);
-        }
-
-        commentRepository.save(comment);
-
-        return true;
+        return CommentResponse.from(comment);
     }
 
     @Transactional
-    public boolean deleteComment(
-        Long commentId
+    public void deleteComment(
+            Long scheduleId,
+            Long commentId
     ) {
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        commentRepository.delete(getComment(scheduleId, commentId));
+    }
 
-        if(commentOptional.isEmpty()) {
-            return false;
-        }
+    private Schedule getSchedule(Long scheduleId) {
+        return scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new NotFoundException("일정이 존재하지 않습니다."));
+    }
 
-        Comment comment = commentOptional.get();
-        commentRepository.delete(comment);
-
-        return true;
+    private Comment getComment(Long scheduleId, Long commentId) {
+        return commentRepository.findByCommentIdAndScheduleScheduleId(commentId, scheduleId)
+                .orElseThrow(() -> new NotFoundException("코멘트가 존재하지 않습니다."));
     }
 }

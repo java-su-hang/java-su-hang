@@ -1,86 +1,64 @@
 package com.dgsw.java_test.controller;
 
 import com.dgsw.java_test.dto.request.CreateCommentRequest;
-import com.dgsw.java_test.dto.response.GetCommentsResponse;
 import com.dgsw.java_test.dto.request.UpdateCommentRequest;
+import com.dgsw.java_test.dto.response.CommentResponse;
+import com.dgsw.java_test.dto.response.CommentsResponse;
 import com.dgsw.java_test.entity.CommentCategory;
 import com.dgsw.java_test.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/schedules/{scheduleId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/{scheduleId}/comments")
-    public ResponseEntity<GetCommentsResponse> getComments(
-        @PathVariable("scheduleId") Long scheduleId,
-        @Param("category") CommentCategory commentCategory
+    @GetMapping
+    public CommentsResponse getComments(
+            @PathVariable Long scheduleId,
+            @RequestParam(required = false) CommentCategory category
     ) {
-        GetCommentsResponse res = new GetCommentsResponse(
-            commentService.getComments(
-                scheduleId,
-                commentCategory
-            )
-        );
-
-        return ResponseEntity.ok(res);
+        return commentService.getComments(scheduleId, category);
     }
 
-    @PostMapping("/{scheduleId}/comments")
-    public ResponseEntity<String> createComment(
-        @PathVariable("scheduleId") Long scheduleId,
-        @RequestBody CreateCommentRequest createCommentRequest
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CommentResponse createComment(
+            @PathVariable Long scheduleId,
+            @RequestBody @Valid CreateCommentRequest request
     ) {
-        boolean created = commentService.createComment(
-            createCommentRequest.category,
-            createCommentRequest.content,
-            createCommentRequest.author,
-            scheduleId
-        );
-
-        if(!created){
-            return ResponseEntity.internalServerError().body("서버 오류 발생");
-        }
-        return ResponseEntity.ok("성공적으로 코멘트를 생성했습니다.");
+        return commentService.createComment(scheduleId, request);
     }
 
-    @PatchMapping("/{scheduleId}/comments/{commentId}")
-    public ResponseEntity<String> updateComment(
-        @PathVariable("commentId") Long commentId,
-        @RequestBody UpdateCommentRequest updateCommentRequest
+    @PatchMapping("/{commentId}")
+    public CommentResponse updateComment(
+            @PathVariable Long scheduleId,
+            @PathVariable Long commentId,
+            @RequestBody @Valid UpdateCommentRequest request
     ) {
-        boolean updated = commentService.updateComment(
-            commentId,
-            updateCommentRequest.content,
-            updateCommentRequest.category
-        );
-
-        if(!updated) {
-            return ResponseEntity.internalServerError().body("서버 오류 발생");
-        }
-        return ResponseEntity.ok("성공적으로 코멘트가 수정됐습니다.");
+        return commentService.updateComment(scheduleId, commentId, request);
     }
 
-    @DeleteMapping("/{scheduleId}/comments/{commentId}")
-    public ResponseEntity<String> deleteComment(
-        @PathVariable("commentId") Long commentId
+    @DeleteMapping("/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(
+            @PathVariable Long scheduleId,
+            @PathVariable Long commentId
     ) {
-        boolean deleted = commentService.deleteComment(commentId);
-
-        if(!deleted) {
-            return ResponseEntity.internalServerError().body("서버 오류 발생");
-        }
-        return ResponseEntity.ok("성공적으로 코멘트를 삭제했습니다.");
+        commentService.deleteComment(scheduleId, commentId);
     }
 }

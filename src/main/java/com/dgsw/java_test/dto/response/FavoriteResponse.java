@@ -1,20 +1,23 @@
 package com.dgsw.java_test.dto.response;
 
 import com.dgsw.java_test.entity.Favorite;
-import lombok.Getter;
+import com.dgsw.java_test.entity.Schedule;
 
-@Getter
-public class FavoriteResponse {
+public record FavoriteResponse(
+        Long id,
+        Long scheduleId,
+        String title,
+        String content
+) {
 
-    private Long id;
-    private Long scheduleId;
-    private String title;
-    private String content;
+    public static FavoriteResponse from(Favorite favorite) {
+        Schedule schedule = favorite.getSchedule();
 
-    public FavoriteResponse(Favorite favorite) {
-        this.id = favorite.getId();
-        this.scheduleId = favorite.getSchedule().getScheduleId();
-        this.title = favorite.getSchedule().getTitle();
-        this.content = favorite.getSchedule().getContent();
+        return new FavoriteResponse(
+                favorite.getId(),
+                schedule.getScheduleId(),
+                schedule.getTitle(),
+                schedule.getContent()
+        );
     }
 }

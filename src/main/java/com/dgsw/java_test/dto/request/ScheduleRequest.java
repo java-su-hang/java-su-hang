@@ -3,26 +3,14 @@ package com.dgsw.java_test.dto.request;
 import com.dgsw.java_test.entity.Subject;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-public class ScheduleRequest {
-    @NotNull
-    private Subject subject;
-
-    @NotNull
-    private LocalDateTime date;
-
-    @NotBlank
-    private String title;
-
-    @NotBlank
-    private String content;
-
-    @NotNull
-    private boolean completed;
+public record ScheduleRequest(
+        @NotNull Subject subject,
+        @NotNull LocalDateTime date,
+        @NotBlank @Size(max = 30) String title,
+        @NotBlank @Size(max = 300) String content,
+        @NotNull Boolean completed
+) {
 }
