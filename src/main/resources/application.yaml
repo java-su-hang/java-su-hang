@@ -1,3 +1,6 @@
 spring:
   application:
     name: java-test
+
+server:
+  port: 2020
