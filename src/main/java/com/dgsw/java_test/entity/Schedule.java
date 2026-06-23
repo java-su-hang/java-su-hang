@@ -1,6 +1,8 @@
 package com.dgsw.java_test.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
@@ -15,6 +17,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Table(name="SCHEDULE")
 public class Schedule {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long scheduleId;
 
     public String subject;
