@@ -1,36 +1,37 @@
 package com.dgsw.java_test.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.Instant;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@Table(name="SCHEDULE")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Table(name = "schedule")
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long scheduleId;
+    @Column(name = "schedule_id")
+    private Long scheduleId;
 
-    public String subject;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "subject", nullable = false)
+    private Subject subject;
 
-    public Instant date;
+    @Column(name = "date", nullable = false)
+    private LocalDateTime date;
 
-    public String content;
+    @Column(name = "title", nullable = false, length = 30)
+    private String title;
 
-    public boolean completed;
+    @Column(name = "content", nullable = false, length = 300)
+    private String content;
 
-    @CreatedDate
-    public Instant createdAt;
-
-    @LastModifiedDate
-    public Instant updatedAt;
+    @Column(name = "completed", nullable = false)
+    @Builder.Default
+    private boolean completed = false;
 }
