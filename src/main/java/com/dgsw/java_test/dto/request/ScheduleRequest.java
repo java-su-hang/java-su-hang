@@ -1,12 +1,28 @@
 package com.dgsw.java_test.dto.request;
 
+import com.dgsw.java_test.entity.Subject;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import java.time.LocalDate;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
+@Setter
 public class ScheduleRequest {
-    private String subject;
-    private LocalDate date;
+    @NotNull
+    private Subject subject;
+
+    @NotNull
+    private LocalDateTime date;
+
+    @NotBlank
     private String title;
+
+    @NotBlank
     private String content;
+
+    @NotNull
+    private boolean completed;
 }

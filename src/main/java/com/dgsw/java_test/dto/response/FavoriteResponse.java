@@ -13,7 +13,7 @@ public class FavoriteResponse {
 
     public FavoriteResponse(Favorite favorite) {
         this.id = favorite.getId();
-        this.scheduleId = favorite.getSchedule().getId();
+        this.scheduleId = favorite.getSchedule().getScheduleId();
         this.title = favorite.getSchedule().getTitle();
         this.content = favorite.getSchedule().getContent();
     }

@@ -1,17 +1,17 @@
-package com.dgsw.java_test.teacherSchedule.service.impl;
+package com.dgsw.java_test.service.impl;
 
-import com.dgsw.java_test.teacherSchedule.dto.request.ScheduleRequest;
-import com.dgsw.java_test.teacherSchedule.dto.response.ScheduleResponse;
-import com.dgsw.java_test.teacherSchedule.entity.Schedule;
-import com.dgsw.java_test.teacherSchedule.repository.ScheduleRepository;
-import com.dgsw.java_test.teacherSchedule.service.ScheduleService;
+import com.dgsw.java_test.dto.request.ScheduleRequest;
+import com.dgsw.java_test.dto.response.ScheduleResponse;
+import com.dgsw.java_test.entity.Schedule;
+import com.dgsw.java_test.repository.ScheduleRepository;
+import com.dgsw.java_test.service.TeacherScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleServiceImpl implements ScheduleService {
+public class TeacherScheduleServiceImpl implements TeacherScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Override

@@ -16,8 +16,9 @@ public class Favorite {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="schedule_id", nullable = false)
+    @JoinColumn(name="schedule_id", nullable = false, insertable = false, updatable = false)
     private Schedule schedule;
 
-
+    @Column(name="schedule_id")
+    private Long scheduleId;
 }

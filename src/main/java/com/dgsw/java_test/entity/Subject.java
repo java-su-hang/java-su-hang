@@ -1,4 +1,4 @@
-package com.dgsw.java_test.teacherSchedule.entity;
+package com.dgsw.java_test.entity;
 
 public enum Subject {
     MATH,

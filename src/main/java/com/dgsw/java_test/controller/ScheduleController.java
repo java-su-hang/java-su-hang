@@ -1,23 +1,22 @@
-package com.dgsw.java_test.teacherSchedule.controller;
+package com.dgsw.java_test.controller;
 
-import com.dgsw.java_test.teacherSchedule.dto.request.ScheduleRequest;
-import com.dgsw.java_test.teacherSchedule.dto.response.ScheduleResponse;
-import com.dgsw.java_test.teacherSchedule.service.ScheduleService;
+import com.dgsw.java_test.dto.request.ScheduleRequest;
+import com.dgsw.java_test.dto.response.ScheduleResponse;
+import com.dgsw.java_test.service.TeacherScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/schedule")
 public class ScheduleController {
-    private final ScheduleService scheduleService;
+    private final TeacherScheduleService teacherScheduleService;
 
 
     @PostMapping
     public ScheduleResponse createSchedule(@RequestBody @Valid ScheduleRequest request) {
-        return scheduleService.createSchedule(request);
+        return teacherScheduleService.createSchedule(request);
     }
 
     @PutMapping("/{scheduleId}")
@@ -25,11 +24,11 @@ public class ScheduleController {
             @PathVariable Long scheduleId,
             @RequestBody @Valid ScheduleRequest request
     ) {
-        return scheduleService.updateSchedule(scheduleId, request);
+        return teacherScheduleService.updateSchedule(scheduleId, request);
     }
 
     @DeleteMapping("/{scheduleId}")
     public void deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+        teacherScheduleService.deleteSchedule(scheduleId);
     }
 }

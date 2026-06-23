@@ -1,10 +1,9 @@
 package com.dgsw.java_test.controller;
 
-import com.dgsw.java_test.dto.request.ScheduleRequest;
 import com.dgsw.java_test.dto.response.FavoriteResponse;
 import com.dgsw.java_test.dto.response.ScheduleResponse;
 import com.dgsw.java_test.service.FavoriteService;
-import com.dgsw.java_test.service.ScheduleService;
+import com.dgsw.java_test.service.StudentScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +13,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FavoriteController {
 
-    private final ScheduleService scheduleService;
+    private final StudentScheduleService studentScheduleService;
     private final FavoriteService favoriteService;
 
     // 일정 조회
     // 애매해서 일단 냅둠
     @GetMapping("/schedules")
     public List<ScheduleResponse> getSchedules() {
-        return scheduleService.getAllSchedules();
+        return studentScheduleService.getAllSchedules();
     }
 
     // 즐겨찾기 추가

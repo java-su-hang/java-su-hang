@@ -1,8 +1,6 @@
 package com.dgsw.java_test.service;
 
-import com.dgsw.java_test.dto.request.ScheduleRequest;
 import com.dgsw.java_test.dto.response.ScheduleResponse;
-import com.dgsw.java_test.entity.Schedule;
 import com.dgsw.java_test.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService {
+public class StudentScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
@@ -19,7 +17,7 @@ public class ScheduleService {
     public List<ScheduleResponse> getAllSchedules() {
         return scheduleRepository.findAll()
                 .stream()
-                .map(ScheduleResponse::new)
+                .map(ScheduleResponse::from)
                 .toList();
     }
 }
