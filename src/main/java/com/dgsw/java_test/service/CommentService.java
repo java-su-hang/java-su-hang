@@ -1,9 +1,10 @@
 package com.dgsw.java_test.service;
 
-import com.dgsw.java_test.dto.GetCommentsResponse;
 import com.dgsw.java_test.entity.Comment;
 import com.dgsw.java_test.entity.CommentCategory;
+import com.dgsw.java_test.entity.Schedule;
 import com.dgsw.java_test.repository.CommentRepository;
+import com.dgsw.java_test.repository.ScheduleRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final ScheduleRepository scheduleRepository;
 
     public List<Comment> getComments(
         Long scheduleId,
@@ -38,6 +40,12 @@ public class CommentService {
         String author,
         Long scheduleId
     ) {
+        Optional<Schedule> scheduleOptional = scheduleRepository.findById(scheduleId);
+
+        if(scheduleOptional.isEmpty()) {
+            return false;
+        }
+
         Comment comment = Comment.builder()
             .content(content)
             .author(author)

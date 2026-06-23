@@ -1,4 +1,4 @@
-package com.dgsw.java_test.dto;
+package com.dgsw.java_test.dto.response;
 
 import com.dgsw.java_test.entity.Comment;
 import java.util.List;

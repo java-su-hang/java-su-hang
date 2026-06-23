@@ -23,31 +23,31 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @Setter
 @Builder
-@Table(name="COMMENT")
+@Table(name="comment")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long commentId;
+    private Long commentId;
 
     @Enumerated(EnumType.STRING)
-    public CommentCategory category;
+    private CommentCategory category;
 
-    public String content;
+    private String content;
 
-    public String author;
+    private String author;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", insertable = false, updatable = false)
-    public Schedule schedule;
+    private Schedule schedule;
 
     @Column(name = "schedule_id")
     private Long scheduleId;
 
     @CreatedDate
-    public Instant createdAt;
+    private Instant createdAt;
 
     @LastModifiedDate
-    public Instant updatedAt;
+    private Instant updatedAt;
 }

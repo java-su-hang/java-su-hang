@@ -1,8 +1,8 @@
 package com.dgsw.java_test.controller;
 
-import com.dgsw.java_test.dto.CreateCommentRequest;
-import com.dgsw.java_test.dto.GetCommentsResponse;
-import com.dgsw.java_test.dto.UpdateCommentRequest;
+import com.dgsw.java_test.dto.request.CreateCommentRequest;
+import com.dgsw.java_test.dto.response.GetCommentsResponse;
+import com.dgsw.java_test.dto.request.UpdateCommentRequest;
 import com.dgsw.java_test.entity.CommentCategory;
 import com.dgsw.java_test.service.CommentService;
 import lombok.RequiredArgsConstructor;

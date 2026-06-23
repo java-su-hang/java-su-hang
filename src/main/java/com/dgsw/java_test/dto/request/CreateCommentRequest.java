@@ -1,4 +1,4 @@
-package com.dgsw.java_test.dto;
+package com.dgsw.java_test.dto.request;
 
 import com.dgsw.java_test.entity.CommentCategory;
 
